@@ -15,7 +15,7 @@ import { HashRouter } from 'react-router-dom'
 const Web3ProviderNetwork = createWeb3ReactRoot(NetworkContextName)
 
 const queryClient = new QueryClient()
-
+ 
 const Providers: React.FC = ({ children }) => {
   return (
     <Web3ReactProvider getLibrary={getLibrary}>
