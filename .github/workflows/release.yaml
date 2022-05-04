@@ -8,19 +8,23 @@ jobs:
     name: Bump Version
     runs-on: ubuntu-latest
     outputs:
-      new_tag: ${{ steps.github_tag_action.outputs.new_tag }}
-      changelog: ${{ steps.github_tag_action.outputs.changelog }}
+      new_tag: ${{ steps.tag_version.outputs.new_tag }}
+      changelog: ${{ steps.tag_version.outputs.changelog }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Bump version and push tag
-        id: github_tag_action
+        id: tag_version
         uses: mathieudutour/github-tag-action@v6.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          release_branches: .*
-          default_bump: true
+      - name: Create a GitHub release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
 
   create_release:
     name: Create Release
